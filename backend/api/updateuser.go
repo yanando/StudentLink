@@ -5,11 +5,24 @@ import (
 	"net/http"
 )
 
+type UpdateUserRequest struct {
+	Email string `json:"email"`
+}
+
 func (apiServer *APIServer) UpdateUserHandler(rw http.ResponseWriter, r *http.Request) {
 	cookie, err := r.Cookie("session")
 	if err != nil {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())
+		return
+	}
+
+	var request UpdateUserRequest
+	dec := json.NewDecoder(r.Body)
+	err = dec.Decode(&request)
+	if err != nil {
+		rw.WriteHeader(ErrorReadingRequest.Code)
+		rw.Write(ErrorReadingRequest.Unmarshal())
 		return
 	}
 
@@ -19,6 +32,8 @@ func (apiServer *APIServer) UpdateUserHandler(rw http.ResponseWriter, r *http.Re
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())
 		return
 	}
+
+	user.Email = request.Email
 
 	err = apiServer.dataManager.UpdateUser(user)
 	if err != nil {

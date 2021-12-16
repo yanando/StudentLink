@@ -8,8 +8,9 @@ import (
 )
 
 func main() {
+	sessionManager := api.NewSessionManager()
 	log.Println("Initializing API")
-	apiServer := api.New(&datamanager.StudentLinkDatabase{})
+	apiServer := api.NewAPIServer(&datamanager.StudentLinkDatabase{}, sessionManager)
 	go func() {
 		err := apiServer.ListenAndServe()
 		if err != nil {
