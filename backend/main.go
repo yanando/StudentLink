@@ -8,9 +8,16 @@ import (
 )
 
 func main() {
+	dataManager := &datamanager.StudentLinkDatabase{}
+	if err := dataManager.Start(); err != nil {
+		log.Fatal(err)
+	}
+	log.Println("Started datamanager")
+	defer dataManager.Close()
+
 	sessionManager := api.NewSessionManager()
 	log.Println("Initializing API")
-	apiServer := api.NewAPIServer(&datamanager.StudentLinkDatabase{}, sessionManager)
+	apiServer := api.NewAPIServer(dataManager, sessionManager)
 	go func() {
 		err := apiServer.ListenAndServe()
 		if err != nil {

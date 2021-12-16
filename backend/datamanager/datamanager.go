@@ -48,16 +48,16 @@ func (s *StudentLinkDatabase) AddUser(user *User, password string) error {
 }
 
 func (s *StudentLinkDatabase) GetUser(id int) (*User, error) {
-	var u *User = &User{}
+	user := &User{}
 
 	// todo: Populate scan
-	err := s.db.QueryRow("SELECT * FROM users WHERE id=?", id).Scan()
+	err := s.db.QueryRow("SELECT * FROM users WHERE id=?", id).Scan(&user.ID, &user.Type, &user.Firstname, &user.Lastname, &user.Email)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return u, nil
+	return user, nil
 }
 
 func (s *StudentLinkDatabase) UpdateUser(user *User) error {
