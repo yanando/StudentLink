@@ -12,6 +12,13 @@ type SessionManager struct {
 	sessions     map[string]*datamanager.User
 }
 
+func NewSessionManager() *SessionManager {
+	return &SessionManager{
+		sessionsLock: sync.Mutex{},
+		sessions:     make(map[string]*datamanager.User),
+	}
+}
+
 func (sManager *SessionManager) GetUserBySessionID(id string) (*datamanager.User, bool) {
 	sManager.sessionsLock.Lock()
 	user, contained := sManager.sessions[id]
