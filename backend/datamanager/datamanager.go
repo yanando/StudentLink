@@ -2,7 +2,6 @@ package datamanager
 
 import (
 	"database/sql"
-	"errors"
 
 	"golang.org/x/crypto/bcrypt"
 	_ "modernc.org/sqlite"
@@ -72,11 +71,22 @@ func (s *StudentLinkDatabase) UpdateUser(user *User) error {
 }
 
 func (s *StudentLinkDatabase) VerifyAuth(username, password string) (int, error) {
-	if password == "hallo" {
-		return 1, nil
+	var dbpw string
+	var id int
+
+	err := s.db.QueryRow("SELECT id, pw_hash FROM users WHERE username = ?", username).Scan(&id, &dbpw)
+
+	if err != nil {
+		return 0, err
 	}
 
-	return 0, errors.New("poop")
+	err = bcrypt.CompareHashAndPassword([]byte(dbpw), []byte(password))
+
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }
 
 func (s *StudentLinkDatabase) AddChatMessage(user *User, msg Message) error {
