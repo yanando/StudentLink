@@ -6,7 +6,7 @@ import (
 )
 
 type LoginRequest struct {
-	Email    string `json:"email"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -19,4 +19,19 @@ func (apiServer APIServer) LoginHandler(rw http.ResponseWriter, r *http.Request)
 		rw.Write(ErrorReadingRequest.Unmarshal())
 		return
 	}
+
+	if request.Username == "" || request.Password == "" {
+		rw.WriteHeader(ErrorInvalidCredentials.Code)
+		rw.Write(ErrorInvalidCredentials.Unmarshal())
+		return
+	}
+
+	authorized, err := apiServer.dataManager.VerifyAuth(request.Username, request.Password)
+	if err != nil || authorized {
+		rw.WriteHeader(ErrorInvalidCredentials.Code)
+		rw.Write(ErrorInvalidCredentials.Unmarshal())
+		return
+	}
+
+	apiServer.dataManager.GetUser()
 }

@@ -4,9 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/yanando/StudentLink/datamanager"
 )
 
 type APIServer struct {
+	dataManager    datamanager.Datamanager
 	sessionManager *SessionManager
 
 	http.Server

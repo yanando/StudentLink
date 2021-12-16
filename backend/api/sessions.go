@@ -1,9 +1,28 @@
 package api
 
-import "github.com/yanando/StudentLink/datamanager"
+import (
+	"sync"
+
+	"github.com/google/uuid"
+	"github.com/yanando/StudentLink/datamanager"
+)
 
 type SessionManager struct {
-	Sessions map[string]*datamanager.User
+	sessionsLock sync.Mutex
+	sessions     map[string]*datamanager.User
 }
 
-func GetSession()
+func (sManager *SessionManager) GetUserBySessionID(id string) (*datamanager.User, bool) {
+	sManager.sessionsLock.Lock()
+	user, contained := sManager.sessions[id]
+	sManager.sessionsLock.Unlock()
+	return user, contained
+}
+
+func (sManager *SessionManager) CreateSession(user *datamanager.User) string {
+	sessionId := uuid.New().String()
+	sManager.sessionsLock.Lock()
+	sManager.sessions[sessionId] = user
+	sManager.sessionsLock.Unlock()
+	return sessionId
+}

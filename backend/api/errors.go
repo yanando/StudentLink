@@ -17,4 +17,6 @@ func (e Error) Unmarshal() []byte {
 
 var (
 	ErrorReadingRequest Error = Error{"There was a problem reading your request", http.StatusBadRequest}
+
+	ErrorInvalidCredentials Error = Error{"Incorrect username or password", http.StatusUnauthorized}
 )
