@@ -15,7 +15,7 @@ func main() {
 			log.Fatal(err)
 			return
 		}
-		log.Println("API started")
 	}()
 
+	select {}
 }
