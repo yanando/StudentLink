@@ -1,7 +1,9 @@
 package api
 
+import "github.com/yanando/StudentLink/datamanager"
+
 type SessionManager struct {
-	Sessions map[string]*data.User
+	Sessions map[string]*datamanager.User
 }
 
 func GetSession()
