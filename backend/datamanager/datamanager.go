@@ -1,38 +1,47 @@
 package datamanager
 
 import (
-	"zombiezen.com/go/sqlite"
-	"zombiezen.com/go/sqlite/sqlitex"
+	"database/sql"
+	"errors"
+
+	_ "modernc.org/sqlite"
 )
 
 type Datamanager interface {
 	GetUser(id int) (User, error)
 	UpdateUser(User) error
-	VerifyAuth(email, password string) (bool, error)
+	VerifyAuth(username, password string) (int, error)
 
 	AddChatMessage(User, Message) error
 	CreateChannel(User) (int, error)
 }
 
 type StudentLinkDatabase struct {
-	conn *sqlite.Conn
+	db *sql.DB
 }
 
 func (s *StudentLinkDatabase) Start() error {
-	conn, err := sqlite.OpenConn("database.db")
-
+	db, err := sql.Open("sqlite", "database.db")
 	if err != nil {
 		return err
 	}
 
-	s.conn = conn
+	s.db = db
 	return nil
 }
 
 func (s *StudentLinkDatabase) Close() error {
-	return s.conn.Close()
+	return s.db.Close()
 }
 
-func (s *StudentLinkDatabase) GetUser(id int) (User, error) {
-	sqlitex.Exec(s.conn, "SELECT * FROM Users WHERE ID = ")
+// func (s *StudentLinkDatabase) GetUser(id int) (User, error) {
+// 	s.db.QueryRow("SELECT * FROM Users WHERE ID=?", id).Scan()
+// }
+
+func (s *StudentLinkDatabase) VerifyAuth(username, password string) (int, error) {
+	if password == "hallo" {
+		return 1, nil
+	}
+
+	return 0, errors.New("poop")
 }
