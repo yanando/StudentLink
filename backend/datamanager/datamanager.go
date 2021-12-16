@@ -83,8 +83,8 @@ func (s *StudentLinkDatabase) AddChatMessage(user *User, msg Message) error {
 	return nil
 }
 
-func (s *StudentLinkDatabase) CreateChannel(user *User) error {
-	return nil
+func (s *StudentLinkDatabase) CreateChannel(user *User) (int, error) {
+	return 0, nil
 }
 
 func hashPassword(plaintext string) string {
