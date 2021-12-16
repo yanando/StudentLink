@@ -10,7 +10,7 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-func (apiServer APIServer) LoginHandler(rw http.ResponseWriter, r *http.Request) {
+func (apiServer *APIServer) LoginHandler(rw http.ResponseWriter, r *http.Request) {
 	var request LoginRequest
 	dec := json.NewDecoder(r.Body)
 	err := dec.Decode(&request)
@@ -26,12 +26,29 @@ func (apiServer APIServer) LoginHandler(rw http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	authorized, err := apiServer.dataManager.VerifyAuth(request.Username, request.Password)
-	if err != nil || authorized {
+	userId, err := apiServer.dataManager.VerifyAuth(request.Username, request.Password)
+	if err != nil {
 		rw.WriteHeader(ErrorInvalidCredentials.Code)
 		rw.Write(ErrorInvalidCredentials.Unmarshal())
 		return
 	}
 
-	apiServer.dataManager.GetUser()
+	user, err := apiServer.dataManager.GetUser(userId)
+	if err != nil {
+		rw.WriteHeader(ErrorFailedToGetUser.Code)
+		rw.Write(ErrorFailedToGetUser.Unmarshal())
+		return
+	}
+
+	sessionId := apiServer.sessionManager.CreateSession(user)
+	rw.Header().Set("Set-Cookie", "session="+sessionId)
+
+	rw.WriteHeader(http.StatusOK)
+	enc := json.NewEncoder(rw)
+	err = enc.Encode(user)
+	if err != nil {
+		rw.WriteHeader(ErrorWritingResponse.Code)
+		rw.Write(ErrorWritingResponse.Unmarshal())
+		return
+	}
 }
