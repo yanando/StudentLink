@@ -51,7 +51,7 @@ func (s *StudentLinkDatabase) GetUser(id int) (*User, error) {
 	user := &User{}
 
 	// todo: Populate scan
-	err := s.db.QueryRow("SELECT * FROM users WHERE id=?", id).Scan(&user.ID, &user.Type, &user.Firstname, &user.Lastname, &user.Email)
+	err := s.db.QueryRow("SELECT id,type,username,firstname,lastname,email FROM users WHERE id=?", id).Scan(&user.ID, &user.Type, &user.Username, &user.Firstname, &user.Lastname, &user.Email)
 
 	if err != nil {
 		return nil, err

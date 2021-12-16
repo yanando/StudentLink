@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 )
 
@@ -51,4 +52,6 @@ func (apiServer *APIServer) LoginHandler(rw http.ResponseWriter, r *http.Request
 		rw.Write(ErrorWritingResponse.Unmarshal())
 		return
 	}
+
+	log.Printf("User %s logged in", user.Username)
 }

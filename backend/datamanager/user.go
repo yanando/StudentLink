@@ -3,11 +3,11 @@ package datamanager
 type userType string
 
 type User struct {
-	ID   int
-	Type userType
+	ID   int      `json:"id"`
+	Type userType `json:"type"`
 
-	Username  string
-	Firstname string
-	Lastname  string
-	Email     string
+	Username  string `json:"username"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
+	Email     string `json:"email"`
 }
