@@ -9,13 +9,13 @@ import (
 )
 
 type Datamanager interface {
-	AddUser(*User) error
+	AddUser(user *User, password string) error
 	GetUser(id int) (*User, error)
-	UpdateUser(*User) error
+	UpdateUser(user *User) error
 	VerifyAuth(username, password string) (int, error)
 
-	AddChatMessage(*User, Message) error
-	CreateChannel(*User) (int, error)
+	AddChatMessage(user *User, msg Message) error
+	CreateChannel(user *User) (int, error)
 }
 
 type StudentLinkDatabase struct {
