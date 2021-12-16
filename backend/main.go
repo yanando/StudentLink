@@ -4,11 +4,12 @@ import (
 	"log"
 
 	"github.com/yanando/StudentLink/api"
+	"github.com/yanando/StudentLink/datamanager"
 )
 
 func main() {
 	log.Println("Initializing API")
-	apiServer := api.New()
+	apiServer := api.New(&datamanager.StudentLinkDatabase{})
 	go func() {
 		err := apiServer.ListenAndServe()
 		if err != nil {

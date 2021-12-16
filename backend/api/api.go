@@ -14,8 +14,9 @@ type APIServer struct {
 	http.Server
 }
 
-func New() *APIServer {
+func New(dataManager datamanager.Datamanager) *APIServer {
 	apiServer := &APIServer{
+		dataManager: dataManager,
 		Server: http.Server{
 			Addr: ":5000",
 		},
@@ -29,7 +30,9 @@ func New() *APIServer {
 			next.ServeHTTP(w, req)
 		})
 	})
-	router.HandleFunc("/login", apiServer.LoginHandler).Methods(http.MethodGet)
+	router.HandleFunc("/login", apiServer.LoginHandler).Methods(http.MethodPost)
+	router.HandleFunc("/user", apiServer.GetUserHandler).Methods(http.MethodGet)
+	router.HandleFunc("/user", apiServer.GetUserHandler).Methods(http.MethodPatch)
 
 	apiServer.Handler = router
 	return apiServer
