@@ -20,7 +20,7 @@ func (apiServer *APIServer) UpdateUserHandler(rw http.ResponseWriter, r *http.Re
 		return
 	}
 
-	err = apiServer.dataManager.UpdateUser(*user)
+	err = apiServer.dataManager.UpdateUser(user)
 	if err != nil {
 		rw.WriteHeader(ErrorFailedToUpdateUser.Code)
 		rw.Write(ErrorFailedToUpdateUser.Unmarshal())
