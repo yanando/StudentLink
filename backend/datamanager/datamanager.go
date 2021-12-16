@@ -2,10 +2,11 @@ package datamanager
 
 import (
 	"zombiezen.com/go/sqlite"
+	"zombiezen.com/go/sqlite/sqlitex"
 )
 
 type Datamanager interface {
-	GetUser() (User, error)
+	GetUser(id int) (User, error)
 	UpdateUser(User) error
 	VerifyAuth(email, password string) (bool, error)
 
@@ -30,4 +31,8 @@ func (s *StudentLinkDatabase) Start() error {
 
 func (s *StudentLinkDatabase) Close() error {
 	return s.conn.Close()
+}
+
+func (s *StudentLinkDatabase) GetUser(id int) (User, error) {
+	sqlitex.Exec(s.conn, "SELECT * FROM Users WHERE ID = ")
 }
