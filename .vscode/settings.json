@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "bruh",
+            "database": "${workspaceFolder:StudentLink}/backend/database.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

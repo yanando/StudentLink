@@ -2,6 +2,7 @@ package datamanager
 
 import (
 	"database/sql"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 	_ "modernc.org/sqlite"
@@ -13,8 +14,8 @@ type Datamanager interface {
 	UpdateUser(user *User) error
 	VerifyAuth(username, password string) (int, error)
 
-	AddChatMessage(user *User, msg Message) error
-	CreateChannel(user *User) (int, error)
+	AddChatMessage(msg Message) error
+	GetChatMessages(authorID, recipientID, amount, offset int) ([]Message, error)
 }
 
 type StudentLinkDatabase struct {
@@ -50,7 +51,6 @@ func (s *StudentLinkDatabase) AddUser(user *User, password string) error {
 func (s *StudentLinkDatabase) GetUser(id int) (*User, error) {
 	user := &User{}
 
-	// todo: Populate scan
 	err := s.db.QueryRow("SELECT id,type,username,firstname,lastname,email FROM users WHERE id=?", id).Scan(&user.ID, &user.Type, &user.Username, &user.Firstname, &user.Lastname, &user.Email)
 
 	if err != nil {
@@ -89,12 +89,35 @@ func (s *StudentLinkDatabase) VerifyAuth(username, password string) (int, error)
 	return id, nil
 }
 
-func (s *StudentLinkDatabase) AddChatMessage(user *User, msg Message) error {
-	return nil
+func (s *StudentLinkDatabase) AddChatMessage(msg Message) error {
+	return s.db.QueryRow("INSERT INTO messages (author_id, recipient_id, content, created_timestamp) VALUES ($1, $2, $3, $4)",
+		msg.AuthorID, msg.RecipientID, msg.Content, time.Now().UnixNano()).Err()
 }
 
-func (s *StudentLinkDatabase) CreateChannel(user *User) (int, error) {
-	return 0, nil
+func (s *StudentLinkDatabase) GetChatMessages(authorID, recipientID, amount, offset int) ([]Message, error) {
+	res, err := s.db.Query("SELECT * FROM messages WHERE author_id = $1 AND recipient_id = $2 ORDER BY created_timestamp ASC LIMIT $3 OFFSET $4",
+		authorID, recipientID, amount, offset)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var messages []Message
+
+	for res.Next() {
+		var message Message
+		var dateInt int64
+		err := res.Scan(&message.ID, &message.AuthorID, &message.RecipientID, &message.Content, &dateInt)
+
+		if err != nil {
+			return nil, err
+		}
+
+		message.CreatedDate = time.Unix(0, dateInt)
+		messages = append(messages, message)
+	}
+
+	return messages, nil
 }
 
 func hashPassword(plaintext string) string {
