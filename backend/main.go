@@ -15,6 +15,13 @@ func main() {
 	log.Println("Started datamanager")
 	defer dataManager.Close()
 
+	dataManager.AddChatMessage(datamanager.Message{
+		ID:          1,
+		AuthorID:    1,
+		RecipientID: 0,
+		Content:     "Test",
+	})
+
 	sessionManager := api.NewSessionManager()
 	log.Println("Initializing API")
 	apiServer := api.NewAPIServer(dataManager, sessionManager)

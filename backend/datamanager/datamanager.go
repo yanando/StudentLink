@@ -40,7 +40,6 @@ func (s *StudentLinkDatabase) AddUser(user *User, password string) error {
 	hash := hashPassword(password)
 	err := s.db.QueryRow("INSERT INTO users (email, username, firstname, lastname, type, pw_hash) Values ($1, $2, $3, $4, $5, $6)",
 		user.Email, user.Username, user.Firstname, user.Lastname, user.Type, hash).Err()
-
 	if err != nil {
 		return err
 	}
@@ -102,8 +101,8 @@ func (s *StudentLinkDatabase) GetChatMessages(authorID, recipientID, amount, off
 		return nil, err
 	}
 
-	var messages []Message
-
+	// Empty message met var declaration zou nil slice value hebben met json => null. Zero-length wordt een empty array in json
+	messages := []Message{}
 	for res.Next() {
 		var message Message
 		var dateInt int64

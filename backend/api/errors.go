@@ -2,6 +2,7 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -21,6 +22,13 @@ var (
 	ErrorUnauthorizedRequest Error = Error{"You are not authorized to use this", http.StatusUnauthorized}
 
 	ErrorInvalidCredentials Error = Error{"Incorrect username or password", http.StatusUnauthorized}
+
+	ErrorTooManyMessages func(amount int) Error = func(amount int) Error {
+		return Error{fmt.Sprintf("You can only get %d messages at once", amount), http.StatusBadRequest}
+	}
+	ErrorFailedToGetMessages Error = Error{"There was a problem getting your messages", http.StatusInternalServerError}
+	ErrorFailedToSendMessage Error = Error{"There was a problem sending your message", http.StatusInternalServerError}
+
 	ErrorFailedToGetUser    Error = Error{"There was a problem getting your user", http.StatusInternalServerError}
 	ErrorFailedToUpdateUser Error = Error{"There was a problem updating your user", http.StatusInternalServerError}
 )

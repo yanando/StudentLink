@@ -3,11 +3,11 @@ package datamanager
 import "time"
 
 type Message struct {
-	ID int
+	ID int `json:"id"`
 
-	AuthorID    int
-	RecipientID int
+	AuthorID    int `json:"author_id"`
+	RecipientID int `json:"recipient_id"`
 
-	Content     string
-	CreatedDate time.Time
+	Content     string    `json:"content"`
+	CreatedDate time.Time `json:"created_date"`
 }
