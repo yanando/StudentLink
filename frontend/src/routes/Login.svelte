@@ -1,15 +1,38 @@
 <script lang="ts">
+    let username: string
+    let password: string
 
+    const submit = async () => {
+        if (!username || !password) {
+            alert('Geen gebruikersnaam of wachtwoord ingevoerd!')
+            return
+        }
+
+        const payload = {
+            username: username,
+            password: password
+        }
+
+        const resp = await fetch('http://localhost:8080/api/login', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+            headers: {
+                'content-type': 'application/json'
+            }
+        })
+
+        console.log(resp)
+    }
 </script>
 
 <div id="wrapper">
     <div class="inside-wrapper">
         <h1>StudentLink Login</h1>
-        <div id="input-wrapper">
-            <input class="input" type="text" name="username" placeholder="Username">
-            <input class="input" type="password" name="password" placeholder="Password">
+        <div>
+            <input class="input" type="text" name="username" placeholder="Username" bind:value={username}>
+            <input class="input" type="password" name="password" placeholder="Password" bind:value={password}>
         </div>
-        <button id="submit">Login</button>
+        <button id="submit" on:click={submit}>Login</button>
     </div>
 </div>
 
@@ -34,17 +57,6 @@
 
         color: #7dafb9;
         background-color: #1f1f1e;
-    }
-
-    #input-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-
-        height: 10vh;
-        width: 15vw;
-
     }
 
     .input {
