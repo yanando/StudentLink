@@ -31,6 +31,7 @@ func NewAPIServer(dataManager datamanager.Datamanager, sessionManager *SessionMa
 			next.ServeHTTP(w, req)
 		})
 	})
+
 	router.HandleFunc("/login", apiServer.LoginHandler).Methods(http.MethodPost)
 
 	router.HandleFunc("/user", apiServer.GetUserHandler).Methods(http.MethodGet)
