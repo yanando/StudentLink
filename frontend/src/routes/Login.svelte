@@ -7,8 +7,8 @@
     <div>
         <input type="text" name="username" placeholder="Username">
         <input type="password" name="password" placeholder="Password">
-        <button id="submit">Login</button>
     </div>
+    <button id="submit">Login</button>
 </div>
 
 <style>
@@ -18,5 +18,9 @@
         align-items: center;
         flex-direction: column;
         height: 100vh;
+    }
+    
+    #submit {
+        margin-top: 5px;
     }
 </style>
