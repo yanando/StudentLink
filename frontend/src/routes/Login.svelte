@@ -28,7 +28,7 @@
 <div id="wrapper">
     <div class="inside-wrapper">
         <h1>StudentLink Login</h1>
-        <div>
+        <div class="input-wrapper">
             <input class="input" type="text" name="username" placeholder="Username" bind:value={username}>
             <input class="input" type="password" name="password" placeholder="Password" bind:value={password}>
         </div>
@@ -57,6 +57,15 @@
 
         color: #7dafb9;
         background-color: #1f1f1e;
+    }
+
+    .input-wrapper {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 10vh;
+        width: 15vw;
     }
 
     .input {
