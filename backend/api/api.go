@@ -41,6 +41,7 @@ func NewAPIServer(dataManager datamanager.Datamanager, sessionManager *SessionMa
 				w.WriteHeader(200)
 				return
 			}
+			next.ServeHTTP(w, req) // dit moest hier wel stoopid, anders respond het niks
 		})
 	})
 

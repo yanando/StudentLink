@@ -1,10 +1,15 @@
 <script lang="ts">
+    import { user, userStore } from "../userSession";
+    import {push} from 'svelte-spa-router'
+
     let username: string
     let password: string
 
+    let errorMessage: string
+
     const submit = async () => {
         if (!username || !password) {
-            alert('Geen gebruikersnaam of wachtwoord ingevoerd!')
+            errorMessage = 'Geen gebruikersnaam of wachtwoord ingevoerd!'
             return
         }
 
@@ -21,7 +26,16 @@
             }
         })
 
-        console.log(resp)
+        if (resp.status != 200) {
+            errorMessage = (await resp.json()).message
+            return
+        }
+
+        const userJSON: user = await resp.json()
+
+        userStore.set(userJSON)
+        
+        push('/profile')
     }
 </script>
 
@@ -29,6 +43,7 @@
     <div class="inside-wrapper">
         <h1>StudentLink Login</h1>
         <div class="input-wrapper">
+            <p class="error" class:hidden={!errorMessage}>{errorMessage}</p>
             <input class="input" type="text" name="username" placeholder="Username" bind:value={username}>
             <input class="input" type="password" name="password" placeholder="Password" bind:value={password}>
         </div>
@@ -66,6 +81,14 @@
         align-items: center;
         height: 10vh;
         width: 15vw;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .error {
+        color: red;
     }
 
     .input {
