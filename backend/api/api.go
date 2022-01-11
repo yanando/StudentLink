@@ -24,7 +24,6 @@ func NewAPIServer(dataManager datamanager.Datamanager, sessionManager *SessionMa
 	}
 
 	router := mux.NewRouter().PathPrefix("/api").Subrouter()
-	router.Use(mux.CORSMethodMiddleware(router))
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
@@ -43,11 +42,11 @@ func NewAPIServer(dataManager datamanager.Datamanager, sessionManager *SessionMa
 
 	router.HandleFunc("/login", apiServer.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
 
-	router.HandleFunc("/user", apiServer.GetUserHandler).Methods(http.MethodGet)
-	router.HandleFunc("/user", apiServer.UpdateUserHandler).Methods(http.MethodPatch)
+	router.HandleFunc("/user", apiServer.GetUserHandler).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc("/user", apiServer.UpdateUserHandler).Methods(http.MethodPatch, http.MethodOptions)
 
-	router.HandleFunc("/messages", apiServer.AddMessageHandler).Methods(http.MethodPost)
-	router.HandleFunc("/messages", apiServer.GetMessagesHandler).Methods(http.MethodGet)
+	router.HandleFunc("/messages", apiServer.AddMessageHandler).Methods(http.MethodPost, http.MethodOptions)
+	router.HandleFunc("/messages", apiServer.GetMessagesHandler).Methods(http.MethodGet, http.MethodOptions)
 
 	apiServer.Handler = router
 	return apiServer
