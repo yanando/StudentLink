@@ -10,8 +10,8 @@ type UpdateUserRequest struct {
 }
 
 func (apiServer *APIServer) UpdateUserHandler(rw http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
+	cookie := r.Header.Get("session")
+	if cookie == "" {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())
 		return
@@ -19,14 +19,14 @@ func (apiServer *APIServer) UpdateUserHandler(rw http.ResponseWriter, r *http.Re
 
 	var request UpdateUserRequest
 	dec := json.NewDecoder(r.Body)
-	err = dec.Decode(&request)
+	err := dec.Decode(&request)
 	if err != nil {
 		rw.WriteHeader(ErrorReadingRequest.Code)
 		rw.Write(ErrorReadingRequest.Unmarshal())
 		return
 	}
 
-	user, exists := apiServer.sessionManager.GetUserBySessionID(cookie.Value)
+	user, exists := apiServer.sessionManager.GetUserBySessionID(cookie)
 	if !exists {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())

@@ -9,6 +9,9 @@ export interface user {
 
     firstname: string;
     lastname: string;
+
+    authToken: string;
 }
 
-export const userStore = writable<user>()
+export const userStore = writable<user>(JSON.parse(localStorage.getItem('user')) || {})
+userStore.subscribe(e => localStorage.setItem('user', JSON.stringify(e)))

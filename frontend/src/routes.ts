@@ -1,9 +1,9 @@
 import Home from "./routes/Home.svelte"
 import Login from './routes/Login.svelte'
-import Profile from './routes/Profile.svelte'
+import Landing from './routes/Landing.svelte'
 
 export default {
     '/': Home,
     '/login': Login,
-    '/profile': Profile
+    '/landing': Landing
 }

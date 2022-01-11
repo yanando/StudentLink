@@ -6,14 +6,14 @@ import (
 )
 
 func (apiServer *APIServer) GetUserHandler(rw http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
+	cookie := r.Header.Get("session")
+	if cookie == "" {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())
 		return
 	}
 
-	user, exists := apiServer.sessionManager.GetUserBySessionID(cookie.Value)
+	user, exists := apiServer.sessionManager.GetUserBySessionID(cookie)
 	if !exists {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())
@@ -22,7 +22,7 @@ func (apiServer *APIServer) GetUserHandler(rw http.ResponseWriter, r *http.Reque
 
 	rw.WriteHeader(http.StatusOK)
 	enc := json.NewEncoder(rw)
-	err = enc.Encode(user)
+	err := enc.Encode(user)
 	if err != nil {
 		rw.WriteHeader(ErrorWritingResponse.Code)
 		rw.Write(ErrorWritingResponse.Unmarshal())

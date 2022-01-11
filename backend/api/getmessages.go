@@ -17,14 +17,14 @@ type GetMessagesRequest struct {
 }
 
 func (apiServer *APIServer) GetMessagesHandler(rw http.ResponseWriter, r *http.Request) {
-	cookie, err := r.Cookie("session")
-	if err != nil {
+	cookie := r.Header.Get("session")
+	if cookie == "" {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())
 		return
 	}
 
-	user, exists := apiServer.sessionManager.GetUserBySessionID(cookie.Value)
+	user, exists := apiServer.sessionManager.GetUserBySessionID(cookie)
 	if !exists {
 		rw.WriteHeader(ErrorUnauthorizedRequest.Code)
 		rw.Write(ErrorUnauthorizedRequest.Unmarshal())

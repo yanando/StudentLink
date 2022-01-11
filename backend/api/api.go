@@ -27,11 +27,12 @@ func NewAPIServer(dataManager datamanager.Datamanager, sessionManager *SessionMa
 	router.Use(func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 			w.Header().Set("Content-Type", "application/json")
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
+			w.Header().Set("Access-Control-Allow-Headers", "*")
+			w.Header().Set("Access-Control-Expose-Headers", "*")
 
 			if req.Method == http.MethodOptions {
-				w.Header().Set("Access-Control-Allow-Origin", "*")
-				w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE")
-				w.Header().Set("Access-Control-Allow-Headers", "*")
 				w.WriteHeader(200)
 				return
 			}

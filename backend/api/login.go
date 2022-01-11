@@ -42,7 +42,7 @@ func (apiServer *APIServer) LoginHandler(rw http.ResponseWriter, r *http.Request
 	}
 
 	sessionId := apiServer.sessionManager.CreateSession(user)
-	rw.Header().Set("Set-Cookie", "session="+sessionId)
+	rw.Header().Set("auth", sessionId)
 
 	rw.WriteHeader(http.StatusOK)
 	enc := json.NewEncoder(rw)

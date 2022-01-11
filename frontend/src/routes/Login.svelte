@@ -1,6 +1,7 @@
 <script lang="ts">
     import { user, userStore } from "../userSession";
     import {push} from 'svelte-spa-router'
+import { API_BASE } from "../config";
 
     let username: string
     let password: string
@@ -18,11 +19,11 @@
             password: password
         }
 
-        const resp = await fetch('http://localhost:8080/api/login', {
+        const resp = await fetch(API_BASE+'/api/login', {
             method: 'POST',
             body: JSON.stringify(payload),
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
             }
         })
 
@@ -32,10 +33,11 @@
         }
 
         const userJSON: user = await resp.json()
+        userJSON.authToken = resp.headers.get('Auth')
 
         userStore.set(userJSON)
         
-        push('/profile')
+        push('/landing')
     }
 </script>
 
