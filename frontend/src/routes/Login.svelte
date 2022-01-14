@@ -1,7 +1,7 @@
 <script lang="ts">
     import { user, userStore } from "../userSession";
     import {push} from 'svelte-spa-router'
-import { API_BASE } from "../config";
+    import { API_BASE } from "../config";
 
     let username: string
     let password: string
@@ -54,6 +54,10 @@ import { API_BASE } from "../config";
 </div>
 
 <style lang="scss">
+    body {
+        overflow: hidden;
+    }
+
     #wrapper {
         display: flex;
         justify-content: center;

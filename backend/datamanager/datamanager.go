@@ -94,7 +94,7 @@ func (s *StudentLinkDatabase) AddChatMessage(msg Message) error {
 }
 
 func (s *StudentLinkDatabase) GetChatMessages(authorID, recipientID, amount, offset int) ([]Message, error) {
-	res, err := s.db.Query("SELECT * FROM messages WHERE author_id = $1 AND recipient_id = $2 ORDER BY created_timestamp ASC LIMIT $3 OFFSET $4",
+	res, err := s.db.Query("SELECT * FROM messages WHERE (author_id = $1 AND recipient_id = $2) OR (author_id = $2 AND recipient_id = $1) ORDER BY created_timestamp ASC LIMIT $3 OFFSET $4",
 		authorID, recipientID, amount, offset)
 
 	if err != nil {
