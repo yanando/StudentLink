@@ -68,6 +68,9 @@
   let sendMessageContent: string;
 
   const sendMessage = async () => {
+    if (!sendMessageContent) {
+        return
+    }
     await fetch(API_BASE + "/api/messages", {
       method: "POST",
       headers: {
