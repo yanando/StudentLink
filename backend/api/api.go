@@ -44,6 +44,7 @@ func NewAPIServer(dataManager datamanager.Datamanager, sessionManager *SessionMa
 	router.HandleFunc("/login", apiServer.LoginHandler).Methods(http.MethodPost, http.MethodOptions)
 
 	router.HandleFunc("/user", apiServer.GetUserHandler).Methods(http.MethodGet, http.MethodOptions)
+	router.HandleFunc("/users", apiServer.GetUsersHandler).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc("/user/{id:[0-9]+}", apiServer.GetUserHandler).Methods(http.MethodGet, http.MethodOptions)
 	router.HandleFunc("/user", apiServer.UpdateUserHandler).Methods(http.MethodPatch, http.MethodOptions)
 

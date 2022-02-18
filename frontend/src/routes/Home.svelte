@@ -8,10 +8,6 @@
 </div>
 
 <style lang="scss">
-    body {
-        overflow: hidden;
-    }
-
     #title {
         text-align: center;
     }

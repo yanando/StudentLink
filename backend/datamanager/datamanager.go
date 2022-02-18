@@ -11,6 +11,7 @@ import (
 type Datamanager interface {
 	AddUser(user *User, password string) error
 	GetUser(id int) (*User, error)
+	GetUsers() ([]*User, error)
 	UpdateUser(user *User) error
 	VerifyAuth(username, password string) (int, error)
 
@@ -57,6 +58,26 @@ func (s *StudentLinkDatabase) GetUser(id int) (*User, error) {
 	}
 
 	return user, nil
+}
+
+func (s *StudentLinkDatabase) GetUsers() ([]*User, error) {
+	users := []*User{}
+
+	rows, err := s.db.Query("SELECT id,type,username,firstname,lastname,email FROM users")
+	if err != nil {
+		return users, err
+	}
+
+	for rows.Next() {
+		user := &User{}
+		err = rows.Scan(&user.ID, &user.Type, &user.Username, &user.Firstname, &user.Lastname, &user.Email)
+		if err != nil {
+			return users, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
 }
 
 func (s *StudentLinkDatabase) UpdateUser(user *User) error {
