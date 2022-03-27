@@ -54,10 +54,6 @@
 </div>
 
 <style lang="scss">
-    body {
-        overflow: hidden;
-    }
-
     #wrapper {
         display: flex;
         justify-content: center;
