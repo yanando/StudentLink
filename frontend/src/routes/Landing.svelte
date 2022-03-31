@@ -1,4 +1,6 @@
 <script lang="ts">
+  import Loading from "../components/Loading.svelte";
+
   import { push } from "svelte-spa-router";
   import { API_BASE } from "../config";
   import { userStore } from "../userSession";
@@ -24,9 +26,13 @@
   <div class="inside-wrapper">
     <div id="chat-header">Users</div>
     <ul class="user-list">
-      {#each users.filter(allUsers => allUsers.username !== user.username) as user}
-        <li class="user" on:click="{() => push(`/chat/${user.id}`)}">
+      {#if users.length === 0}
+        <Loading />
+      {/if}
+      {#each users.filter((allUsers) => allUsers.username !== user.username) as user}
+        <li class="user" on:click={() => push(`/chat/${user.id}`)}>
           {user.username}
+          <span>{user.type}</span>
         </li>
       {/each}
     </ul>
@@ -40,7 +46,7 @@
     align-items: center;
     height: 100vh;
 
-    font-size: 1.5vmin;
+    font-size: 1em;
     background-color: #252427;
   }
 
@@ -60,6 +66,7 @@
   ul {
     display: flex;
     flex-direction: column;
+    align-items: center;
     list-style: none;
     width: 80%;
     height: 80%;
@@ -76,18 +83,25 @@
     justify-content: center;
     align-items: center;
     font-weight: 600;
-    font-size: 2.5vmin;
   }
 
   .user {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 1.5em;
+    width: 100%;
+    font-size: 1.25em;
     height: 4em;
     margin: 10px 0;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
+
+    span {
+      margin-right: 20px;
+      align-self: flex-end;
+      color: #527177;
+    }
   }
 </style>

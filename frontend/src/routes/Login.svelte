@@ -1,6 +1,6 @@
 <script lang="ts">
   import { user, userStore } from "../userSession";
-  import { push } from "svelte-spa-router";
+  import { push, link } from "svelte-spa-router";
   import { API_BASE } from "../config";
 
   let username: string;
@@ -61,7 +61,10 @@
         bind:value={password}
       />
     </div>
-    <button id="submit" on:click={submit}>Login</button>
+    <div class="button-wrapper">
+      <button id="submit" on:click={submit}>Login</button>
+      <a href="/register" class="register-link" use:link>Register</a>
+    </div>
   </div>
 </div>
 
@@ -147,5 +150,16 @@
       transition: 0.3s ease all;
       background-color: rgba(12, 125, 157, 0.75);
     }
+  }
+
+  .button-wrapper {
+      display: flex;
+      flex-direction: column;
+  }
+
+  .register-link {
+    font-size: 0.7em;
+    color: #0c7d9d;
+    text-decoration: none;
   }
 </style>

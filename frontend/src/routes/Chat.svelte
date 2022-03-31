@@ -125,7 +125,7 @@
       />
       <input
         type="button"
-        value="send message"
+        value="send"
         id="send-message-button"
         on:click={() => sendMessage()}
       />
@@ -140,7 +140,7 @@
     align-items: center;
     height: 100vh;
 
-    font-size: 1.5vmin;
+    font-size: 1em;
     background-color: #252427;
   }
 
@@ -159,6 +159,8 @@
 
   .send-wrapper {
     display: flex;
+    height: 3em;
+    width: 80%;
     justify-content: space-evenly;
     align-items: center;
   }
@@ -196,12 +198,13 @@
       position: absolute;
       right: 5px;
       top: 5px;
-      font-size: 1vmin;
+      font-size: 0.5em;
     }
   }
 
   #send-message-content {
     width: 60%;
+    height: 100%;
     text-align: center;
     outline: none;
     border: none;
@@ -212,7 +215,6 @@
 
     color: white;
     padding: 5px;
-    font-size: 3vmin;
     border-radius: 5px;
     background-color: #252427;
   }
@@ -221,8 +223,7 @@
     width: 30%;
     height: 100%;
     outline: none;
-
-    font-size: 1.5vmin;
+    font-size: 0.75em;
     border: none;
     border-radius: 5px;
     color: white;
@@ -245,7 +246,7 @@
     justify-content: center;
     align-items: center;
     font-weight: 600;
-    font-size: 2.5vmin;
+    font-size: 1em;
     width: 100%;
 
     img {
