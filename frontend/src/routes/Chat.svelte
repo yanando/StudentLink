@@ -121,7 +121,7 @@
         id="send-message-content"
         bind:value={sendMessageContent}
         on:keyup={(event) =>
-          event.key === "Enter" && event.ctrlKey ? sendMessage() : ""}
+          event.key === "Enter" ? sendMessage() : ""}
       />
       <input
         type="button"
